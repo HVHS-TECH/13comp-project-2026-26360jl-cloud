@@ -1,7 +1,19 @@
+userInfo = {
+    uid: "",
+    name: "",
+    photoUrl: ""
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     firebase.auth().onAuthStateChanged((user) => {
         if (user)
         {
+            if (userInfo.uid == "")
+            {
+                userInfo.uid = user.uid
+                userInfo.name = user.displayName
+                userInfo.photoUrl = user.photoURL
+            }
             return
         }
 
@@ -9,3 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.replace("./index.html")
     })
 })
+
+function getUserInfo()
+{
+    return userInfo;
+}
