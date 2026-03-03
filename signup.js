@@ -6,7 +6,7 @@ async function signup()
 
     if (userAge < 5 || userAge > 99)
     {
-        alert("Please enter valid age")
+        alert("Please enter valid age between 5 and 99")
         return
     }
 

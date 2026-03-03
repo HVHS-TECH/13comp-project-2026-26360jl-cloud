@@ -1,10 +1,7 @@
-loggedIn = false
-
 document.addEventListener("DOMContentLoaded", function () {
     firebase.auth().onAuthStateChanged((user) => {
         if (user)
         {
-            loggedIn = true
             window.location.replace("./games.html")
         }
     })
@@ -12,16 +9,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function login()
 {
-    if (loggedIn == false)
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+        var userInfo = result.user;
+
+        checkFirebase(userInfo)
+    })
+}
+
+function checkFirebase(userInfo)
+{
+    firebase.database().ref('/registeredUsers/' + userInfo.uid).once('value', _checkFirebase);
+
+    function _checkFirebase(snapshot)
     {
-        window.location.replace("./signup.html")
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-            var token = result.credential.accessToken;
-            var userInfo = result.user;
-            sessionStorage.setItem("registeredToFirebase", false)
-            
-            loggedIn = true
-        })
+        //if user is not registered in firebase
+        if (snapshot.val() == null)
+        {
+            alert("you are not signed up")
+            window.location.replace("./signup.html")
+            return
+        }
     }
 }

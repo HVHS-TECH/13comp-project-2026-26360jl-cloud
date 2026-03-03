@@ -8,15 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     firebase.auth().onAuthStateChanged((user) => {
         if (user)
         {
-            if (userInfo.uid == "")
-            {
-                userInfo.uid = user.uid
-                userInfo.name = user.displayName
-                userInfo.photoUrl = user.photoURL
-            }
+            userInfo.uid = user.uid
+            userInfo.name = user.displayName
+            userInfo.photoUrl = user.photoURL
             return
         }
 
+        //if user is null, you're not logged in. Redirect to homepage
         alert("you are not logged in")
         window.location.replace("./index.html")
     })
