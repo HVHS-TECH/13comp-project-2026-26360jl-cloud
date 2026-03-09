@@ -7,14 +7,21 @@
         <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-analytics.js"></script>
         <script src="fb_setup.js"></script>
         <script src="confirm_login.js"></script>
-        <script src="gtn.js"></script>
+        <script src="gtn_queue.js"></script>
+        <script src="gtn_game.js"></script>
     </head>
     <body>
         <h1>guess the number</h1>
         <a href="games.html">go back</a>
         <img id="profile" src="">
-        <button onclick="queue()">queue</button>
-        <button onclick="leaveQueue()">leave queue</button>
-        <p id="queueCount">0 players in queue</p>
+        <div id="queue">
+            <button onclick="queue()">queue</button>
+            <button onclick="leaveQueue()">leave queue</button>
+            <p id="queueCount">0 players in queue</p>
+        </div>
+        <div id="game">
+            <h3 id="turnTracker"></h3>
+            <span><input id="guessInput" placeholder="enter your guess here:" type="number"><button onclick="sendTurn()">guess</button></span>
+        </div>
     </body>
 </html>
