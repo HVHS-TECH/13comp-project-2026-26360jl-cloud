@@ -29,7 +29,7 @@ function readQueue(snapshot)
 
     if (queueLength < 2)
         return
-
+    
     if (userUids[0] == userInfo.uid)
     {
         startGame(userTimestamps[0].lobbyId, userUids[0], userUids[1])
