@@ -99,8 +99,8 @@ async function initGameInfo()
             opponentUID = LOBBY_DATA.player1;
     }
     
-    const OPPONENT_INFO = await getUserInfoFromUID(OPPONENT_INFO)
-    gameInfo.opponentInfo = opponentInfo
+    const OPPONENT_INFO = await getUserInfoFromUID(opponentUID)
+    gameInfo.opponentInfo = OPPONENT_INFO
 
     setupUI()
 }
