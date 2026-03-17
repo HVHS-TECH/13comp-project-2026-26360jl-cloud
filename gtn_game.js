@@ -111,6 +111,8 @@ function setupUI()
     document.getElementById("queue").style.display = "none";
     document.getElementById("opponent").src = gameInfo.opponentInfo.photoUrl
     document.getElementById("vsTag").innerHTML = getUserInfo().name + " (you) vs " + gameInfo.opponentInfo.name
+    //document.getElementById("gameStatus").style.display = "";
+    document.getElementById("postGameButton").style.display = "none"
 }
 
 function readGameData(snapshot)
@@ -118,7 +120,8 @@ function readGameData(snapshot)
     const GAME_DATA = snapshot.val()
     if (GAME_DATA == null)
     {
-        console.log("Game is finished")
+        document.getElementById("gameStatus").innerHTML = gameInfo.opponentInfo.name + " has quit the game, " + getUserInfo().name + " wins by default";
+        afterGameFinish()
         return
     }
 
@@ -162,4 +165,20 @@ function sendTurn()
 function setGameStatus(message)
 {
     firebase.database().ref("/liveGames/" + gameInfo.lobbyId + "/gameStatus").set(message);
+}
+
+function afterGameFinish()
+{
+    document.getElementById("turnTracker").style.display = "none"
+    document.getElementById("guessInput").style.display = "none"
+    document.getElementById("guessButton").style.display = "none"
+    document.getElementById("opponent").src = ""
+    document.getElementById("vsTag").innerHTML = "vs"
+    document.getElementById("postGameButton").style.display = ""
+}
+
+function returnToQueue()
+{
+        document.getElementById("queue").style.display = ""
+        document.getElementById("game").style.display = "none"
 }
