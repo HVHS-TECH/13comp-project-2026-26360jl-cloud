@@ -118,9 +118,22 @@ function setupUI()
 function readGameData(snapshot)
 {
     const GAME_DATA = snapshot.val()
+
     if (GAME_DATA == null)
     {
         document.getElementById("gameStatus").innerHTML = gameInfo.opponentInfo.name + " has quit the game, " + getUserInfo().name + " wins by default";
+
+        leaderboardIncrementStat(getUserInfo().uid, "gtnWins")
+        leaderboardIncrementStat(gameInfo.opponentInfo.uid, "gtnLosses")
+
+        afterGameFinish()
+        return
+    }
+
+    document.getElementById("gameStatus").innerHTML = GAME_DATA.gameStatus
+
+    if (GAME_DATA.playersTurn == -1)
+    {
         afterGameFinish()
         return
     }
@@ -135,8 +148,6 @@ function readGameData(snapshot)
     {
         document.getElementById("turnTracker").innerHTML = "it is not your turn"
     }
-
-    document.getElementById("gameStatus").innerHTML = GAME_DATA.gameStatus
 }
 
 function sendTurn()
@@ -148,6 +159,11 @@ function sendTurn()
         if (GUESS == gameInfo.correctNumber)
         {
             setGameStatus(getUserInfo().name + " guessed " + GUESS + ", correct! " + getUserInfo().name + " wins")
+            
+            leaderboardIncrementStat(getUserInfo().uid, "gtnWins")
+            leaderboardIncrementStat(gameInfo.opponentInfo.uid, "gtnLosses")
+            firebase.database().ref("/liveGames/" + gameInfo.lobbyId + "/playersTurn").set(-1);
+            return
         }
         if (GUESS < gameInfo.correctNumber)
         {
@@ -169,6 +185,7 @@ function setGameStatus(message)
 
 function afterGameFinish()
 {
+    userInGame = false
     document.getElementById("turnTracker").style.display = "none"
     document.getElementById("guessInput").style.display = "none"
     document.getElementById("guessButton").style.display = "none"

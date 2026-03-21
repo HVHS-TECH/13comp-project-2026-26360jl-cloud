@@ -1,0 +1,15 @@
+async function leaderboardIncrementStat(uid, stat)
+{
+    var statValue = 0
+    await firebase.database().ref("leaderboard/" + uid + "/" + stat).once('value', _getStatValue);
+
+    function _getStatValue(snapshot)
+    {
+        if (snapshot.val() == null) return //if this is null they arent in the firebase leaderboard database
+        statValue = snapshot.val()
+    }
+
+    statValue++;
+
+    firebase.database().ref("leaderboard/" + uid + "/" + stat).set(statValue);
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-analytics.js"></script>
+        <script src="scripts/fb_setup.js"></script>
+        <script src="scripts/confirm_login.js"></script>
+        <script src="scripts/leaderboard.js"></script>
+    </head>
+    <body>
+        <h1>leaderboards</h1>
+        <a href="games.html">go back</a>
+        <br><br>
+        <label>sort by: </label><select id="sortOption">
+            <option value="gtnWins">GTN Wins</option>
+            <option value="gtnLosses">GTN Losses</option>
+            <option value="highscore">Second Game Highscore</option>
+        </select>
+        <ul>
+            <li>#1 Joseph Loughnane : GTN Wins: 4, GTN Losses: 3, Highscore: 0</li>
+            <li>#2 Juan Churro</li>
+            <li>#3 Boh Mingle</li>
+        </ul>
+    </body>
+</html>
