@@ -9,3 +9,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+function firebaseRead(ref, func)
+{
+  firebase.database().ref(ref).once('value', func);
+}
