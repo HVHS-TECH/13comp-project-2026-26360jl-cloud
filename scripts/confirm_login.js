@@ -34,10 +34,7 @@ async function getUserInfoFromUID(uid)
         photoUrl: ""
     }
 
-    await firebase.database().ref('/registeredUsers/' + uid).once('value', _checkFirebase);
-
-    function _checkFirebase(snapshot)
-    {
+    await firebase.database().ref('/registeredUsers/' + uid).once('value', (snapshot) => {
         const userInfo = snapshot.val();
         //if user is not registered in firebase
         if (userInfo == null)
@@ -47,7 +44,7 @@ async function getUserInfoFromUID(uid)
         idkHowObjectsWorkInJavascript.uid = userInfo.uid
         idkHowObjectsWorkInJavascript.name = userInfo.displayName
         idkHowObjectsWorkInJavascript.photoUrl = userInfo.photoUrl
-    }
+    });
     
     return idkHowObjectsWorkInJavascript;
 }

@@ -1,36 +1,43 @@
 var userInfoLoaded = false
 var userInfo = {}
+var leaderboardData = {}
 
 document.addEventListener("DOMContentLoaded", function () {
-    refreshLeaderboard();
+    loadLeaderboardData();
 })
 
-function refreshLeaderboard()
+function loadLeaderboardData()
 {
     firebaseRead("/leaderboard/", async function(snapshot){
-        if (snapshot.val() == null) return
-        leaderboardData = snapshot.val();
+            if (snapshot.val() == null) return
+            leaderboardData = snapshot.val();
 
-        if (userInfoLoaded == false) {
-            console.log("NULL")
             await loadUserInfoAsync(leaderboardData)
             userInfoLoaded = true
-        }
-
-        getSelectedStatArray(leaderboardData)
-    })
+            getSelectedStatArray(leaderboardData)
+        })
 }
 
-const TYPE_GTN_WINS = 0;
-const TYPE_GTN_LOSSES = 1;
-const TYPE_HIGHSCORE = 2;
+async function refreshLeaderboard()
+{
+    if (userInfoLoaded == false) {
+        console.log("User info is not loaded")
+        loadLeaderboardData();
+        return
+    }
+    
+    getSelectedStatArray(leaderboardData)
+}
 
+//loading 1 by 1 which is bad async
 async function loadUserInfoAsync(leaderboardData)
 {
     const USER_UIDS = Object.keys(leaderboardData);
     for (var i = 0; i < USER_UIDS.length; i++)
     {
         const UID = USER_UIDS[i]
+        //await leaderboardValidateStats(UID, "gtnWins")
+        //await leaderboardValidateStats(UID, "gtnLosses")
         userInfo[UID] = await getUserInfoFromUID(UID)
     }
 }
@@ -40,9 +47,7 @@ function getSelectedStatArray(leaderboardData)
     const SELECT_ELEMENT = document.getElementById("sortOption").value
 
     var items = Object.keys(leaderboardData)
-    console.log(leaderboardData) 
     items.sort((a, b) => leaderboardData[b][SELECT_ELEMENT] - leaderboardData[a][SELECT_ELEMENT]);
-    console.log(items)
     const ulElement = document.getElementById("leaderboardList");
 
     while (ulElement.children.length > 0)
@@ -55,6 +60,11 @@ function getSelectedStatArray(leaderboardData)
         const USER_UID = items[i]
         const liElement = document.createElement("li");
         liElement.textContent = "#" + (i + 1) + " " + userInfo[USER_UID].name + " : " + leaderboardData[USER_UID][SELECT_ELEMENT]
+
+        const imgElement = document.createElement("img")
+        imgElement.src = userInfo[USER_UID].photoUrl
+        liElement.appendChild(imgElement)
+
         ulElement.appendChild(liElement)
     }
 }

@@ -7,17 +7,18 @@
         <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-analytics.js"></script>
         <script src="scripts/fb_setup.js"></script>
         <script src="scripts/confirm_login.js"></script>
+        <script src="scripts/leaderboard_util.js"></script>
         <script src="scripts/leaderboard.js"></script>
     </head>
     <body>
         <h1>leaderboards</h1>
         <a href="games.html">go back</a>
         <br><br>
-        <label>sort by: </label><select id="sortOption">
+        <label>sort by: </label><select id="sortOption" onchange="refreshLeaderboard()">
             <option value="gtnWins">GTN Wins</option>
             <option value="gtnLosses">GTN Losses</option>
             <option value="highscore">Second Game Highscore</option>
-        </select><button onclick="refreshLeaderboard()">refresh</button>
+        </select><button onclick="loadLeaderboardData()">refresh</button>
         <ul id="leaderboardList">
         </ul>
     </body>
