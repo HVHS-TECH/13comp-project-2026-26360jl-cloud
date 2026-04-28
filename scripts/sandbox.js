@@ -22,34 +22,20 @@ console.log(items)
 items.sort((a, b) => userInfo.uid[b].wins - userInfo.uid[a].wins);
 console.log(items)
 
-var c = false
-c = test()
-console.log(c)
-console.log(testtest())
-
-function test(_callback)
-{
-    return true
+var responses = {
+    v: false
 }
 
-function testtest()
+async function makeTrue(input)
 {
-    var cases = [
-        false, false, false, false, false
-    ]
-    cases[0] = test()
-    cases[1] = test()
-    cases[2] = test()
-    cases[3] = test()
-    cases[4] = test()
-    var breakout = false
-    while (!breakout)
-    {
-        for (var i = 0; i < cases.length; i++)
-        {
-            if (cases[i] == false) break
-        }
-        breakout = true
-    }
-    return cases
+    await firebaseRead("/leaderboard/", async function(snapshot){
+        if (snapshot.val() == null) return
+        leaderboardData = snapshot.val();
+        console.log(leaderboardData)
+    })
+    responses[input] = true
 }
+
+makeTrue("v")
+
+console.log(responses.v)
