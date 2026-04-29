@@ -1,55 +1,51 @@
-var userInfo={};
-userInfo.uid = {
-    uid1 : {
-        wins: 0,
-        losses: 1
-    },
-    uid2 : {
-        wins: 2,
-        losses: 3
-    },
-    uid3 : {
-        wins: 4,
-        losses: 0
-    }
+var responses = {
 }
 
-console.log(userInfo)
-console.log(userInfo["uid"].age)
-console.log(Object.keys(userInfo.uid))
-var items = Object.keys(userInfo.uid)
-console.log(items) 
-items.sort((a, b) => userInfo.uid[b].wins - userInfo.uid[a].wins);
-console.log(items)
+var l
 
-var c = false
-c = test()
-console.log(c)
-console.log(testtest())
-
-function test(_callback)
+async function makeTrue(input)
 {
-    return true
+    l = await getUserInfoFromUID("2u0ixpUp8cMGs79iFU9ZNmTUUkB2")
+    console.log(l.name)
+    responses[input] = true
 }
 
-function testtest()
+function getFunction()
 {
-    var cases = [
-        false, false, false, false, false
-    ]
-    cases[0] = test()
-    cases[1] = test()
-    cases[2] = test()
-    cases[3] = test()
-    cases[4] = test()
-    var breakout = false
-    while (!breakout)
+    return () =>
     {
-        for (var i = 0; i < cases.length; i++)
-        {
-            if (cases[i] == false) break
-        }
-        breakout = true
+        console.log("thisd function has ran")
     }
-    return cases
+}
+
+console.log(getFunction())
+console.log(getFunction()())
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+document.addEventListener("DOMContentLoaded", async function () {
+    console.log(makeTrue("id")())
+
+    var queue = 0
+    while(queue < priorityFreeIndex)
+    {
+        var id = responses[priority[queue]]
+        console.log(id)
+        if (id == true)
+        {
+            queue++
+            console.log(l)
+        }
+        await sleep(1)
+    }
+})
+
+priority = []
+priorityFreeIndex = 0
+
+function registerAsync(name, func)
+{
+    responses[name] = false
+    priority[priorityFreeIndex] = name
+    priorityFreeIndex++;
+    func(name)
 }

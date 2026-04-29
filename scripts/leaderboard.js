@@ -29,17 +29,51 @@ async function refreshLeaderboard()
     getSelectedStatArray(leaderboardData)
 }
 
+var responses = {
+}
+priority = []
+priorityOutput = []
+priorityFreeIndex = 0
+
 //loading 1 by 1 which is bad async
 async function loadUserInfoAsync(leaderboardData)
 {
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const USER_UIDS = Object.keys(leaderboardData);
+
     for (var i = 0; i < USER_UIDS.length; i++)
     {
         const UID = USER_UIDS[i]
         //await leaderboardValidateStats(UID, "gtnWins")
         //await leaderboardValidateStats(UID, "gtnLosses")
-        userInfo[UID] = await getUserInfoFromUID(UID)
+        getUserInfoSync(i, UID)
     }
+
+    var queue = 0
+    while(queue < priorityFreeIndex)
+    {
+        var id = responses[priority[queue]]
+        console.log(id)
+        if (id == true)
+        {
+            queue++
+            console.log(l)
+        }
+        await sleep(1)
+    }
+}
+
+async function getUserInfoSync(threadId, uid)
+{
+    var prioIndex = priorityFreeIndex
+    responses[threadId] = false
+    
+    priority[prioIndex] = threadId
+    priorityFreeIndex++;
+
+    l = await getUserInfoFromUID(uid)
+    priorityOutput[prioIndex] = l
+    responses[threadId] = true
 }
 
 function getSelectedStatArray(leaderboardData)
