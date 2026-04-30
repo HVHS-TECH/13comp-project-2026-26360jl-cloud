@@ -10,17 +10,6 @@ async function makeTrue(input)
     responses[input] = true
 }
 
-function getFunction()
-{
-    return () =>
-    {
-        console.log("thisd function has ran")
-    }
-}
-
-console.log(getFunction())
-console.log(getFunction()())
-
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 document.addEventListener("DOMContentLoaded", async function () {
     console.log(makeTrue("id")())
