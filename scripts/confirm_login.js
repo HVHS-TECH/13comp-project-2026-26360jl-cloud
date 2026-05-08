@@ -27,7 +27,6 @@ function getUserInfo()
 
 async function getUserInfoFromUID(uid)
 {
-    //good code doesnt need comments to explain how it works
     idkHowObjectsWorkInJavascript = {
         uid: "",
         name: "",
