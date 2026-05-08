@@ -121,12 +121,16 @@ function readGameData(snapshot)
 
     if (GAME_DATA == null)
     {
-        document.getElementById("gameStatus").innerHTML = gameInfo.opponentInfo.name + " has quit the game, " + getUserInfo().name + " wins by default";
+        if (userInGame)
+        {
+            console.log(userInGame)
+            document.getElementById("gameStatus").innerHTML = gameInfo.opponentInfo.name + " has quit the game, " + getUserInfo().name + " wins by default";
 
-        leaderboardIncrementStat(getUserInfo().uid, "gtnWins")
-        leaderboardIncrementStat(gameInfo.opponentInfo.uid, "gtnLosses")
+            leaderboardIncrementStat(getUserInfo().uid, "gtnWins")
+            leaderboardIncrementStat(gameInfo.opponentInfo.uid, "gtnLosses")
 
-        afterGameFinish()
+            afterGameFinish()
+        }
         return
     }
 
@@ -185,6 +189,7 @@ function setGameStatus(message)
 
 function afterGameFinish()
 {
+    console.log("afterGame has ran")
     userInGame = false
     document.getElementById("turnTracker").style.display = "none"
     document.getElementById("guessInput").style.display = "none"
@@ -192,6 +197,7 @@ function afterGameFinish()
     document.getElementById("opponent").src = ""
     document.getElementById("vsTag").innerHTML = "vs"
     document.getElementById("postGameButton").style.display = ""
+    console.log(userInGame)
 }
 
 function returnToQueue()
