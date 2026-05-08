@@ -36,8 +36,8 @@ async function loadUserInfoAsync(leaderboardData)
     for (var i = 0; i < USER_UIDS.length; i++)
     {
         const UID = USER_UIDS[i]
-        //await leaderboardValidateStats(UID, "gtnWins")
-        //await leaderboardValidateStats(UID, "gtnLosses")
+        await leaderboardValidateStats(UID, "gtnWins")
+        await leaderboardValidateStats(UID, "gtnLosses")
         userInfo[UID] = await getUserInfoFromUID(UID)
     }
 }
