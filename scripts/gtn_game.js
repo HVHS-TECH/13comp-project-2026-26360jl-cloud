@@ -189,7 +189,6 @@ function setGameStatus(message)
 
 function afterGameFinish()
 {
-    console.log("afterGame has ran")
     userInGame = false
     document.getElementById("turnTracker").style.display = "none"
     document.getElementById("guessInput").style.display = "none"
@@ -197,7 +196,6 @@ function afterGameFinish()
     document.getElementById("opponent").src = ""
     document.getElementById("vsTag").innerHTML = "vs"
     document.getElementById("postGameButton").style.display = ""
-    console.log(userInGame)
 }
 
 function returnToQueue()
