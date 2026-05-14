@@ -9,10 +9,41 @@
         <script src="scripts/confirm_login.js"></script>
         <script src="scripts/leaderboard_util.js"></script>
         <script src="scripts/leaderboard.js"></script>
+        <link href="css/style.css" rel="stylesheet"/>
+        <link href="css/leaderboard.css" rel="stylesheet"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </head>
     <body>
+        <header class="onetwothreefour border-bottom">
+            <div class="dropdown fries">
+              <a
+                href="#"
+                class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                >
+            <img
+                src=""
+                alt="mdo"
+                width="32"
+                height="32"
+                class="rounded-circle"
+                id="profileImg"
+            />
+            </a>
+              <ul class="dropdown-menu text-small">
+                <li><a class="dropdown-item" href="#">My Stats</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="#">Sign out</a></li>
+              </ul>
+            </div>
+            <div class="keepthelinkshere">
+              <a href="games.html" class="pa">Games</a>
+              <a href="leaderboards.html" class="pa link-secondary">Leaderboards</a>
+            </div>
+        </header>
         <h1>leaderboards</h1>
-        <a href="games.html">go back</a>
         <br><br>
         <label>sort by: </label><select id="sortOption" onchange="refreshLeaderboard()">
             <option value="gtnWins">GTN Wins</option>

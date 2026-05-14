@@ -62,9 +62,11 @@ function getSelectedStatArray(leaderboardData)
         liElement.textContent = "#" + (i + 1) + " " + userInfo[USER_UID].name + " : " + leaderboardData[USER_UID][SELECT_ELEMENT]
 
         const imgElement = document.createElement("img")
+        imgElement.classList.add("rounded-circle")
+        imgElement.width = 32
+        imgElement.height = 32
         imgElement.src = userInfo[USER_UID].photoUrl
         liElement.appendChild(imgElement)
-
         ulElement.appendChild(liElement)
     }
 }

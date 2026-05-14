@@ -5,12 +5,18 @@ userInfo = {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    const img = document.getElementById("profileImg")
+    img.src = localStorage.getItem('userImg');
+
     firebase.auth().onAuthStateChanged((user) => {
         if (user)
         {
             userInfo.uid = user.uid
             userInfo.name = user.displayName
             userInfo.photoUrl = user.photoURL
+
+            localStorage.setItem('userImg', userInfo.photoUrl);
             return
         }
 

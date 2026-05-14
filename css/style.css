@@ -4,9 +4,8 @@ h1 {
 }
 
 .onetwothreefour {
-    margin: auto;
-    border: 3px solid green;
     padding: 10px;
+    display: flex;
 }
 
 .fries {
@@ -14,7 +13,24 @@ h1 {
 }
 
 .keepthelinkshere {
-    width: 100px;
     display: flex;
-    flex:auto;
+    margin-left: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.pa {
+    display: block;
+    padding: 4px;
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background: 0 0;
+    border: 0;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.links {
+    display: flex;
 }
