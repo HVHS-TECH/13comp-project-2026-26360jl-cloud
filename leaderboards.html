@@ -45,11 +45,15 @@
         </header>
         <h1>Leaderboards</h1>
         <br>
-        <label>Sort by: </label><select id="sortOption" onchange="refreshLeaderboard()">
+        <div class="oneline">
+        <label class="onelinechild">Sort by: </label>
+        <select class="onelinechild form-select" id="sortOption" onchange="refreshLeaderboard()">
             <option value="gtnWins">GTN Wins</option>
             <option value="gtnLosses">GTN Losses</option>
             <option value="highscore">Second Game Highscore</option>
-        </select><button onclick="loadLeaderboardData()">refresh</button>
+        </select>
+        <button class="onelinechild btn-dark btn" onclick="loadLeaderboardData()">Refresh</button>
+        </div>
         <div id="leaderboard">
         </div>
     </body>

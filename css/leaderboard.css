@@ -19,3 +19,18 @@
     font-size: 24px;
     color: rgb(128, 128, 128);
 }
+
+#sortOption {
+    width: min-content;
+}
+
+.oneline {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.onelinechild {
+    margin: 4px;
+}
