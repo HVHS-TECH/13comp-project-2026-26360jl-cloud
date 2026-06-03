@@ -16,9 +16,15 @@ function readQueue(snapshot)
         return
     }
 
-    const userUids = Object.keys(snapshot.val());
-    const userTimestamps = Object.values(snapshot.val());
-    var queueLength = userTimestamps.length
+    var abc = snapshot.val();
+
+    var unsorted = Object.keys(snapshot.val());
+
+    var sorted = unsorted.sort((a, b) => abc[a].timestamp - abc[b].timestamp)
+
+    console.log(abc[sorted[0]].lobbyId)
+
+    var queueLength = sorted.length
 
     queueText.innerHTML = queueLength + " players in queue"
 
@@ -30,20 +36,21 @@ function readQueue(snapshot)
     if (queueLength < 2)
         return
     
-    if (userUids[0] == userInfo.uid)
+    if (sorted[0] == userInfo.uid)
     {
-        startGame(userTimestamps[0].lobbyId, userUids[0], userUids[1])
-        leaveQueue()
+        startGame(abc[sorted[0]].lobbyId, sorted[0], sorted[1])
+        leaveQueue(sorted[1])
     }
-    if (userUids[1] == userInfo.uid)
+    if (sorted[1] == userInfo.uid)
     {
-        initGame(userTimestamps[0].lobbyId)
-        leaveQueue()
+        initGame(abc[sorted[0]].lobbyId)
     }
 }
 
 function queue()
 {
+    if (userInQueue) return;
+
     userInQueue = true
     const userInfo = getUserInfo()
     const lobbyId = crypto.randomUUID()
@@ -58,9 +65,10 @@ function queue()
     ref.onDisconnect().remove()
 }
 
-function leaveQueue()
+function leaveQueue(user2uid)
 {
     userInQueue = false
     const userInfo = getUserInfo()
     firebase.database().ref('queue/' + userInfo.uid).remove()
+    firebase.database().ref('queue/' + user2uid).remove()
 }
