@@ -6,8 +6,8 @@ userInfo = {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const img = document.getElementById("profileImg")
-    img.src = localStorage.getItem('userImg');
+    //const img = document.getElementById("profileImg")
+    //img.src = localStorage.getItem('userImg');
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user)

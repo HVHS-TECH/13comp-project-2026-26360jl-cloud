@@ -13,4 +13,14 @@ firebase.initializeApp(firebaseConfig);
 function firebaseRead(ref, func)
 {
   firebase.database().ref(ref).once('value', func);
-}D
+}
+
+function firebaseWrite(ref, write)
+{
+  firebase.database().ref(ref).update(write);
+}
+
+function firebaseRef(ref)
+{
+  return firebase.database().ref(ref);
+}

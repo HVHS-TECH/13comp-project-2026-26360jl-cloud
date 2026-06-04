@@ -1,40 +1,62 @@
-var responses = {
-}
+var userInQueue = false
+var temp = false
 
-var l
-
-async function makeTrue(input)
+function joinQueue()
 {
-    l = await getUserInfoFromUID("2u0ixpUp8cMGs79iFU9ZNmTUUkB2")
-    console.log(l.name)
-    responses[input] = true
-}
+    if (userInQueue) return
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-document.addEventListener("DOMContentLoaded", async function () {
-    console.log(makeTrue("id")())
+    userInQueue = true
+    firebaseWrite("queue/" + userInfo.uid, {timestamp: Date.now()})
+    firebaseRef("queue/" + userInfo.uid).onDisconnect().remove()
 
-    var queue = 0
-    while(queue < priorityFreeIndex)
-    {
-        var id = responses[priority[queue]]
-        console.log(id)
-        if (id == true)
+    firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
+        if (snapshot.val().lobbyId != null)
         {
-            queue++
-            console.log(l)
+            console.log(snapshot.val().lobbyId)
+            leaveQueue()
         }
-        await sleep(1)
-    }
-})
+    })
 
-priority = []
-priorityFreeIndex = 0
+    firebaseRef("queue").on('value', (snapshot) => {
+        if (temp) return
 
-function registerAsync(name, func)
+        const queueData = snapshot.val();
+        if (queueData == null) return;
+
+        var uids = Object.keys(queueData)
+        var sortedQueue = uids.sort((a, b) => queueData[a].timestamp - queueData[b].timestamp)
+
+        if (sortedQueue.length < 2) return
+
+        //ONLY the first person in queue will make changes
+
+        if (sortedQueue[0] == userInfo.uid)
+        {
+            temp = true
+
+            console.log("thats me")
+            
+            const lobbyId = crypto.randomUUID()
+            const RANDOM_NUMBER = Math.floor(Math.random() * 100);
+
+            firebaseWrite("liveGames/" + lobbyId, {
+                correctNumber: RANDOM_NUMBER,
+                playersTurn: 0,
+                player1: sortedQueue[0],
+                player2: sortedQueue[1],
+                gameStatus: ""
+            })
+
+            firebaseWrite("queue/" + sortedQueue[1], {lobbyId: lobbyId});
+            leaveQueue()
+        }
+    })
+}
+
+function leaveQueue()
 {
-    responses[name] = false
-    priority[priorityFreeIndex] = name
-    priorityFreeIndex++;
-    func(name)
+    userInQueue = false
+
+    firebaseRef("queue/" + userInfo.uid).remove()
+    firebaseRef("queue").off();
 }
