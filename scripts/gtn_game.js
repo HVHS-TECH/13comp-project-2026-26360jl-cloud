@@ -36,6 +36,7 @@ function startGame(lobbyId, _player1, _player2)
     ref.onDisconnect().remove()
 
     initGame(lobbyId)
+    leaveQueue(_player2)
 }
 
 async function initGame(lobbyId)

@@ -39,7 +39,6 @@ function readQueue(snapshot)
     if (sorted[0] == userInfo.uid)
     {
         startGame(abc[sorted[0]].lobbyId, sorted[0], sorted[1])
-        leaveQueue(sorted[1])
     }
     if (sorted[1] == userInfo.uid)
     {
