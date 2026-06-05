@@ -25,32 +25,54 @@ function joinQueue()
         }
     })
 
-    /*firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
+    firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
         if (snapshot.val().lobbyId != null)
         {
             console.log(snapshot.val().lobbyId)
             leaveQueue()
         }
+        if (snapshot.val().matchmake != null)
+        {
+            console.log("i am matchmaker");
+        }
     })
-
-    */
 }
 
 function matchmake(snapshot)
 {
     console.log("i am matchmaking")
     firebaseRef("queue").on('value', (snapshot) => {
+        if (temp) return
+
         var queueLength = Object.keys(snapshot.val()).length;
         var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
 
         if (queueLength >= 2)
         {
+            temp = true
             console.log("matchmake " + sorted[0] + " + " + sorted[1])
+            const lobbyId = crypto.randomUUID()
+            const RANDOM_NUMBER = Math.floor(Math.random() * 100);
+
+            firebaseWrite("liveGames/" + lobbyId, {
+                correctNumber: RANDOM_NUMBER,
+                playersTurn: 0,
+                player1: sorted[0],
+                player2: sorted[1],
+                gameStatus: ""
+            })
+
+            if (queueLength > 2)
+            {
+                firebaseWrite("queue/" + [sorted[2], {matchmake: true}])
+            }
+
+
+            firebaseWrite("queue/" + sorted[1], {lobbyId: lobbyId})
+            leaveQueue()
         }
     })
 }
-
-console.log("PAGES WOKR")
 
 function leaveQueue()
 {
