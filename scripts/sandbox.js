@@ -50,6 +50,8 @@ function matchmake(snapshot)
     })
 }
 
+console.log("PAGES WOKR")
+
 function leaveQueue()
 {
     userInQueue = false
