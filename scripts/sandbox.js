@@ -1,6 +1,11 @@
 var userInQueue = false
 var temp = false
 
+document.addEventListener("DOMContentLoaded", function () {
+    var img = document.getElementById("pfpImg");
+    img.src = localStorage.getItem('userImg');
+})
+
 function joinQueue()
 {
     if (userInQueue) return
@@ -15,17 +20,21 @@ function joinQueue()
         //if you are the first person in queue
         if (queueLength == 1)
         {
-            firebaseRef("queue").on('value', matchmake)
+            firebaseWrite("queue/" + userInfo.uid, {matchmake: true})
         }
         else if (queueLength == 2)
         {
             var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
-            if (sorted[0] == userInfo.uid)
-                firebaseRef("queue").on('value', matchmake)
+            if (snapshot.val()[sorted[0]].matchmake == null)
+                firebaseWrite("queue/" + sorted[0], {matchmake: true})
         }
     })
 
     firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
+        console.log(snapshot.val())
+        if (snapshot.val() == null)
+            return
+
         if (snapshot.val().lobbyId != null)
         {
             console.log(snapshot.val().lobbyId)
@@ -34,17 +43,18 @@ function joinQueue()
         if (snapshot.val().matchmake != null)
         {
             console.log("i am matchmaker");
+            firebaseRef("queue").on('value', matchmake)
         }
     })
 }
 
 function matchmake(snapshot)
 {
-    console.log("i am matchmaking")
     firebaseRef("queue").on('value', (snapshot) => {
         if (temp) return
-
+        console.log("i am matchmaking")
         var queueLength = Object.keys(snapshot.val()).length;
+        console.log(queueLength)
         var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
 
         if (queueLength >= 2)
@@ -64,7 +74,7 @@ function matchmake(snapshot)
 
             if (queueLength > 2)
             {
-                firebaseWrite("queue/" + [sorted[2], {matchmake: true}])
+                firebaseWrite("queue/" + sorted[2], {matchmake: true})
             }
 
 
