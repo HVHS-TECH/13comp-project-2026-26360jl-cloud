@@ -10,7 +10,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-function firebaseRead(ref, func)
+async function firebaseRead(ref, func)
 {
   firebase.database().ref(ref).once('value', func);
 }
@@ -20,12 +20,11 @@ async function firebaseSnapshot(ref)
   var result;
   await firebase.database().ref(ref).once('value', (snapshot) => {
     result = snapshot.val()
-    console.log(snapshot.val())
   })
   return result;
 }
 
-function firebaseWrite(ref, write)
+async function firebaseWrite(ref, write)
 {
   firebase.database().ref(ref).update(write);
 }

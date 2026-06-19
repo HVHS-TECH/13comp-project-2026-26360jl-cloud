@@ -8,10 +8,22 @@
         <script src="scripts/fb_setup.js"></script>
         <script src="scripts/confirm_login.js"></script>
         <script src="scripts/sandbox.js"></script>
+        <script src="scripts/rewrite_game.js"></script>
     </head>
     <body>
-        <img src="" id="pfpImg">
-        <button onclick="joinQueue()">queue</button>
-        <button onclick="leaveQueue()">leave queue</button>
+        <div id="flexbox">
+            <img id="profile" src=""><a id="vsTag">       vs      </a><img id="opponent" src="">
+        </div>
+        <div id="queue">
+            <button onclick="joinQueue()">queue</button>
+            <button onclick="leaveQueue()">leave queue</button>
+            <p id="queueCount">0 players in queue</p>
+        </div>
+        <div id="game">
+            <h3 id="turnTracker">it is your turn</h3>
+            <span><input id="guessInput" placeholder="enter your guess here:" type="number"><button id="guessButton" onclick="sendTurn()">guess</button></span>
+            <p id="gameStatus">A guessed 5 too low!</p>
+            <button id="postGameButton"><a href="">go back to queue</a></button>
+        </div>
     </body>
 </html>

@@ -2,7 +2,7 @@ var userInQueue = false
 var temp = false
 
 document.addEventListener("DOMContentLoaded", function () {
-    var img = document.getElementById("pfpImg");
+    var img = document.getElementById("profile");
     img.src = localStorage.getItem('userImg');
 })
 
@@ -39,18 +39,20 @@ function joinQueue()
         {
             console.log(snapshot.val().lobbyId)
             leaveQueue()
+            joinLobby(snapshot.val().lobbyId)
         }
         if (snapshot.val().matchmake != null)
         {
+            if (temp) return
             console.log("i am matchmaker");
-            firebaseRef("queue").on('value', matchmake)
+            matchmake()
         }
     })
 }
 
 function matchmake(snapshot)
 {
-    firebaseRef("queue").on('value', (snapshot) => {
+    firebaseRef("queue").on('value', async (snapshot) => {
         if (temp) return
         console.log("i am matchmaking")
         var queueLength = Object.keys(snapshot.val()).length;
@@ -72,14 +74,9 @@ function matchmake(snapshot)
                 gameStatus: ""
             })
 
-            if (queueLength > 2)
-            {
-                firebaseWrite("queue/" + sorted[2], {matchmake: true})
-            }
-
-
-            firebaseWrite("queue/" + sorted[1], {lobbyId: lobbyId})
+            await firebaseWrite("queue/" + sorted[1], {lobbyId: lobbyId})
             leaveQueue()
+            joinLobby(lobbyId)
         }
     })
 }
