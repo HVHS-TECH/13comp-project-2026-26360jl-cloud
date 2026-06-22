@@ -1,90 +1,53 @@
-var userInQueue = false
-var temp = false
+var callbacks = {
 
-document.addEventListener("DOMContentLoaded", function () {
-    var img = document.getElementById("profile");
-    img.src = localStorage.getItem('userImg');
+}
+
+var queue = []
+var freeIndex = 0;
+
+var USERINFO = []
+var i = 0
+
+async function registerCallback(id, func, jay)
+{
+    queue[freeIndex] = id
+    freeIndex++;
+
+    callbacks[id] = false
+    let c = await func;
+    callbacks[id] = true
+
+    if (c != null)
+    {
+        USERINFO[jay] = c;
+    }
+}
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+firebaseRead("leaderboard/", async (snapshot) => {
+    uids = Object.keys(snapshot.val())
+    
+    for (var j = 0; j < uids.length; j++)
+    {
+        registerCallback("uid" + j, getUserInfoFromUID(uids[j]), j)
+        registerCallback("lstatWins" + j, leaderboardValidateStats("gtnWins", uids[j]))
+        registerCallback("lstatLoss" + j, leaderboardValidateStats("gtnLosses", uids[j]))
+    }
+    
+    var breakout = false
+    var i = 0;
+    while (!breakout)
+    {
+        if (i >= freeIndex)
+            breakout = true
+
+        if (callbacks[queue[i]] == true)    
+        {
+            i++;
+            console.log("true")
+        }
+
+        await sleep(1)
+    }
+    console.log(USERINFO)
 })
-
-function joinQueue()
-{
-    if (userInQueue) return
-
-    userInQueue = true
-    firebaseWrite("queue/" + userInfo.uid, {timestamp: Date.now()})
-    firebaseRef("queue/" + userInfo.uid).onDisconnect().remove()
-
-    firebaseRead("queue", (snapshot) => {
-        var queueLength = Object.keys(snapshot.val()).length;
-        console.log(queueLength)
-        //if you are the first person in queue
-        if (queueLength == 1)
-        {
-            firebaseWrite("queue/" + userInfo.uid, {matchmake: true})
-        }
-        else if (queueLength == 2)
-        {
-            var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
-            if (snapshot.val()[sorted[0]].matchmake == null)
-                firebaseWrite("queue/" + sorted[0], {matchmake: true})
-        }
-    })
-
-    firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
-        console.log(snapshot.val())
-        if (snapshot.val() == null)
-            return
-
-        if (snapshot.val().lobbyId != null)
-        {
-            console.log(snapshot.val().lobbyId)
-            leaveQueue()
-            joinLobby(snapshot.val().lobbyId)
-        }
-        if (snapshot.val().matchmake != null)
-        {
-            if (temp) return
-            console.log("i am matchmaker");
-            matchmake()
-        }
-    })
-}
-
-function matchmake(snapshot)
-{
-    firebaseRef("queue").on('value', async (snapshot) => {
-        if (temp) return
-        console.log("i am matchmaking")
-        var queueLength = Object.keys(snapshot.val()).length;
-        console.log(queueLength)
-        var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
-
-        if (queueLength >= 2)
-        {
-            temp = true
-            console.log("matchmake " + sorted[0] + " + " + sorted[1])
-            const lobbyId = crypto.randomUUID()
-            const RANDOM_NUMBER = Math.floor(Math.random() * 100);
-
-            firebaseWrite("liveGames/" + lobbyId, {
-                correctNumber: RANDOM_NUMBER,
-                playersTurn: 0,
-                player1: sorted[0],
-                player2: sorted[1],
-                gameStatus: ""
-            })
-
-            await firebaseWrite("queue/" + sorted[1], {lobbyId: lobbyId})
-            leaveQueue()
-            joinLobby(lobbyId)
-        }
-    })
-}
-
-function leaveQueue()
-{
-    userInQueue = false
-
-    firebaseRef("queue/" + userInfo.uid).remove()
-    firebaseRef("queue").off();
-}

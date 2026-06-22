@@ -33,7 +33,7 @@ function getUserInfo()
 
 async function getUserInfoFromUID(uid)
 {
-    idkHowObjectsWorkInJavascript = {
+    var idkHowObjectsWorkInJavascript = {
         uid: "",
         name: "",
         photoUrl: ""

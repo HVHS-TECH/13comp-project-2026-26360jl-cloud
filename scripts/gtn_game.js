@@ -1,109 +1,41 @@
-var userInGame = false
-
-gameInfo = {
+var userInGame = false;
+let gameInfo = {
     lobbyId: 0,
-    playerTurnId: 1,
+    currentPlayersTurn: 0,
+    playerTurnId: 0,
     opponentInfo: {
         uid: "",
         name: "",
         photoUrl: ""
     },
-    correctNumber: 0,
-    playersTurn: 0
+    correctNumber: 0
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("game").style.display = "none";
-});
-
-function startGame(lobbyId, _player1, _player2)
+async function joinLobby(lobbyId)
 {
-    gameInfo.playerTurnId = 0
-    var ref = firebase.database().ref("liveGames/" + lobbyId);
+    const LOBBY_INFO = await firebaseSnapshot("liveGames/" + lobbyId);
 
-    const RANDOM_NUMBER = Math.floor(Math.random() * 100);
-
-    ref.set(
-        {
-            correctNumber: RANDOM_NUMBER,
-            playersTurn: 0,
-            player1: _player1,
-            player2: _player2,
-            gameStatus: ""
-        }
-    );
-
-    ref.onDisconnect().remove()
-
-    initGame(lobbyId)
-    leaveQueue(_player2)
-}
-
-async function initGame(lobbyId)
-{
     gameInfo.lobbyId = lobbyId;
-    waitForLobbyInit()
-}
+    gameInfo.correctNumber = LOBBY_INFO.correctNumber;
+    gameInfo.currentPlayersTurn = 0;
 
-async function waitForLobbyInit()
-{
-    var lobbyInitialized = false
-    await firebase.database().ref('/liveGames/' + gameInfo.lobbyId).once('value', _waitForLobbyInit);
-
-    function _waitForLobbyInit(snapshot)
+    var opponentUid;
+    if (userInfo.uid == LOBBY_INFO.player1)
     {
-        //does the lobby exist yet?
-        if (snapshot.val() == null)
-        {
-            waitForLobbyInit()
-            return
-        }
-        else lobbyInitialized = true
+        gameInfo.playerTurnId = 0
+        opponentUid = LOBBY_INFO.player2
+    }
+    else
+    {
+        gameInfo.playerTurnId = 1
+        opponentUid = LOBBY_INFO.player1
     }
 
-    if (lobbyInitialized) afterLobbyInit()
-}
+    gameInfo.opponentInfo = await getUserInfoFromUID(opponentUid);
 
-function afterLobbyInit()
-{
-    userInGame = true
-    if (gameInfo.playerTurnId == 1)
-    {
-        var ref = firebase.database().ref("liveGames/" + gameInfo.lobbyId);
-        ref.onDisconnect().remove()
-    }
-    
-    initGameInfo()
-    firebase.database().ref('/liveGames/' + gameInfo.lobbyId).on('value', readGameData);
-}
-
-async function initGameInfo()
-{
-    await firebase.database().ref('/liveGames/' + gameInfo.lobbyId).once('value', _initGameInfo);
-
-    var opponentUID
-
-    function _initGameInfo(snapshot)
-    {
-        const LOBBY_DATA = snapshot.val()
-
-        if (LOBBY_DATA == null)
-        {
-            console.log("something very wrong has happened")
-            return
-        }
-
-        gameInfo.correctNumber = LOBBY_DATA.correctNumber
-        if (gameInfo.playerTurnId == 0)
-            opponentUID = LOBBY_DATA.player2;
-        else if (gameInfo.playerTurnId == 1)
-            opponentUID = LOBBY_DATA.player1;
-    }
-    
-    const OPPONENT_INFO = await getUserInfoFromUID(opponentUID)
-    gameInfo.opponentInfo = OPPONENT_INFO
-
-    setupUI()
+    firebaseRef("liveGames/" + lobbyId).on('value', readGameData);
+    setupUI();
+    userInGame = true;
 }
 
 function setupUI()
@@ -197,10 +129,4 @@ function afterGameFinish()
     document.getElementById("opponent").src = ""
     document.getElementById("vsTag").innerHTML = "vs"
     document.getElementById("postGameButton").style.display = ""
-}
-
-function returnToQueue()
-{
-        document.getElementById("queue").style.display = ""
-        document.getElementById("game").style.display = "none"
 }
