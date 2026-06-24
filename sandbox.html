@@ -11,5 +11,15 @@
         <script src="scripts/sandbox.js"></script>
     </head>
     <body>
+        <label class="onelinechild">Sort by: </label>
+        <select class="onelinechild form-select" id="sortOption" onchange="refreshLeaderboard()">
+            <option value="gtnWins">GTN Wins</option>
+            <option value="gtnLosses">GTN Losses</option>
+            <option value="highscore">Second Game Highscore</option>
+        </select>
+        <button class="onelinechild btn-dark btn" onclick="loadLeaderboardData()">Refresh</button>
+        </div>
+        <div id="leaderboard">
+        </div>
     </body>
 </html>

@@ -34,6 +34,7 @@ async function joinLobby(lobbyId)
     gameInfo.opponentInfo = await getUserInfoFromUID(opponentUid);
 
     firebaseRef("liveGames/" + lobbyId).on('value', readGameData);
+    firebaseRef("liveGames/" + lobbyId).onDisconnect().remove()
     setupUI();
     userInGame = true;
 }
