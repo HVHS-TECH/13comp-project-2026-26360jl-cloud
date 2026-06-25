@@ -53,3 +53,25 @@ async function getUserInfoFromUID(uid)
     
     return idkHowObjectsWorkInJavascript;
 }
+
+function toggleFunMode()
+{
+    const element = document.getElementById("subscribe")
+    const i = document.getElementById("f")
+
+    if (element.checked)
+    {
+        document.body.style.background = "linear-gradient(to bottom right, rgb(101, 190, 60), rgb(54, 134, 240), red)"
+        document.body.style.backgroundSize = "600% 600%"
+        document.body.style.animation = "gradient  8s ease infinite"
+        document.body.style.backgroundColor = "rgb(250, 240, 226)"
+        document.body.style.height = "100vh"
+        document.body.style.overflow = "hidden"
+        i.style.display = "none"
+    }
+    else
+    {
+        document.body.style = ""
+        i.style.display = ""
+    }
+}

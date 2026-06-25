@@ -1,11 +1,36 @@
-var userInQueue = false
-var temp = false
+var userInQueue = false;
+var temp = false;
+var matchmaking = false;
 
 document.addEventListener("DOMContentLoaded", function () {
     var img = document.getElementById("profile");
     img.src = localStorage.getItem('userImg');
     document.getElementById("game").style.display = "none";
+    firebaseRef("queue").on('value', updateQueueLength)
 })
+
+function updateQueueLength(snapshot)
+{
+    const queueCounter = document.getElementById("queueCount");
+
+    if (snapshot.val() == null)
+    {
+        queueCounter.innerHTML = "0 players in queue"
+        return
+    }
+
+    var rename = ""
+    if (userInQueue)
+        rename = "(you are queuing)"
+
+    var queueLength = Object.keys(snapshot.val()).length;
+    queueCounter.innerHTML = queueLength + " players in queue " + rename;
+
+    if (matchmaking)
+    {
+        matchmake(snapshot);
+    }
+}
 
 function joinQueue()
 {
@@ -17,8 +42,10 @@ function joinQueue()
     firebaseRef("queue/" + userInfo.uid).onDisconnect().remove()
 
     firebaseRead("queue", (snapshot) => {
+        if (snapshot.val() == null) return
+
         var queueLength = Object.keys(snapshot.val()).length;
-        console.log(queueLength)
+
         //if you are the first person in queue
         if (queueLength == 1)
         {
@@ -33,54 +60,51 @@ function joinQueue()
     })
 
     firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
-        console.log(snapshot.val())
         if (snapshot.val() == null)
             return
 
         if (snapshot.val().lobbyId != null)
         {
-            console.log(snapshot.val().lobbyId)
             leaveQueue()
             joinLobby(snapshot.val().lobbyId)
         }
         if (snapshot.val().matchmake != null)
         {
             if (temp) return
-            console.log("i am matchmaker");
-            matchmake()
+            matchmaking = true;
+            //matchmake()
         }
     })
 }
 
-function matchmake(snapshot)
+async function matchmake(snapshot)
 {
-    firebaseRef("queue").on('value', async (snapshot) => {
-        if (temp) return
-        console.log("i am matchmaking")
-        var queueLength = Object.keys(snapshot.val()).length;
-        console.log(queueLength)
-        var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
+    if (temp) return
+    if (snapshot.val() == null) return
 
-        if (queueLength >= 2)
-        {
-            temp = true
-            console.log("matchmake " + sorted[0] + " + " + sorted[1])
-            const lobbyId = crypto.randomUUID()
-            const RANDOM_NUMBER = Math.floor(Math.random() * 100);
+    var queueLength = Object.keys(snapshot.val()).length;
+    var sorted = Object.keys(snapshot.val()).sort((a, b) => snapshot.val()[a].timestamp - snapshot.val()[b].timestamp)
 
-            firebaseWrite("liveGames/" + lobbyId, {
-                correctNumber: RANDOM_NUMBER,
-                playersTurn: 0,
-                player1: sorted[0],
-                player2: sorted[1],
-                gameStatus: ""
-            })
+    if (queueLength >= 2)
+    {
+        temp = true
+        console.log("matchmake " + sorted[0] + " + " + sorted[1])
+        const lobbyId = crypto.randomUUID()
+        const RANDOM_NUMBER = Math.floor(Math.random() * 100);
 
-            await firebaseWrite("queue/" + sorted[1], {lobbyId: lobbyId})
-            leaveQueue()
-            joinLobby(lobbyId)
-        }
-    })
+        firebaseWrite("liveGames/" + lobbyId, {
+            correctNumber: RANDOM_NUMBER,
+            playersTurn: 0,
+            player1: sorted[0],
+            player2: sorted[1],
+            gameStatus: ""
+        })
+
+        await firebaseWrite("queue/" + sorted[1], {lobbyId: lobbyId})
+        leaveQueue()
+        joinLobby(lobbyId)
+        matchmaking = false;
+    }
 }
 
 function leaveQueue()
@@ -90,5 +114,5 @@ function leaveQueue()
     userInQueue = false
 
     firebaseRef("queue/" + userInfo.uid).remove()
-    firebaseRef("queue").off();
+    firebaseRef("queue/" + userInfo.uid).off()
 }

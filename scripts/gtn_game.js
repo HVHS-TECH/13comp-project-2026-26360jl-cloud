@@ -51,6 +51,12 @@ function setupUI()
 
 function readGameData(snapshot)
 {
+    if (userInGame && userInQueue)
+    {
+        error("SOMETHING WRONG HAS HAPPENED")
+        return
+    }
+
     const GAME_DATA = snapshot.val()
 
     if (GAME_DATA == null)
@@ -100,6 +106,8 @@ function sendTurn()
             
             leaderboardIncrementStat(getUserInfo().uid, "gtnWins")
             leaderboardIncrementStat(gameInfo.opponentInfo.uid, "gtnLosses")
+
+            //firebaseWrite("/liveGames/" + gameInfo.lobbyId + "/playersTurn", -1);
             firebase.database().ref("/liveGames/" + gameInfo.lobbyId + "/playersTurn").set(-1);
             return
         }
@@ -112,12 +120,14 @@ function sendTurn()
             setGameStatus(getUserInfo().name + " guessed " + GUESS + ", too high")
         }
 
+        //firebaseWrite("/liveGames/" + gameInfo.lobbyId + "/playersTurn", 1 - gameInfo.playerTurnId);
         firebase.database().ref("/liveGames/" + gameInfo.lobbyId + "/playersTurn").set(1 - gameInfo.playerTurnId);
     }
 }
 
 function setGameStatus(message)
 {
+    //firebaseWrite("/liveGames/" + gameInfo.lobbyId + "/gameStatus", message);
     firebase.database().ref("/liveGames/" + gameInfo.lobbyId + "/gameStatus").set(message);
 }
 

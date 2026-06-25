@@ -3,6 +3,15 @@ h1 {
     text-align: center;
 }
 
+@keyframes gradient {
+    0%{ background-position:50% 100%; }
+    20%{ background-position:0% 50%; }
+    40%{ background-position:0% 0%; }
+    60%{ background-position:50% 0%; }
+    80%{ background-position:100% 50%; }
+    100%{ background-position:50% 100%; }
+}
+
 .onetwothreefour {
     padding: 10px;
     display: flex;
