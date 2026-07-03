@@ -1,38 +1,26 @@
+/****************************************************************************************************************/
+// games.js
+// Written by Joseph L
+// 
+// Code for the opening/closing sections on the games page
+// Only used in games.html
+/****************************************************************************************************************/
+
+//stores booleans with ids as keys
+// Eg: gameButton1: false (closed)
+// Eg: gameButton2: true (opened)
 var toggled = {
 
 }
 
-function openStatPopup()
-{
-    const modal = document.getElementById("modal")
-    const statsInfo = document.getElementById("stats-info")
-    modal.classList.add("open")
-
-    firebaseRead("leaderboard/" + getUserInfo().uid, (snapshot) => {
-        const STATS = snapshot.val();
-        if (STATS == null) return
-
-        var wins = STATS.gtnWins;
-        var losses = STATS.gtnLosses;
-
-        if (wins == null) { wins = 0; leaderboardValidateStats(getUserInfo().uid, "gtnWins") }
-        if (losses == null) { losses = 0; leaderboardValidateStats(getUserInfo().uid, "gtnLosses") }
-
-        const wr = wins / (wins + losses)
-        const rounded = Math.round(wr * 100) / 100
-
-        statsInfo.innerHTML =   "GTN Wins: " + wins + ", " +
-                                "GTN Losses: " + losses + ", " +
-                                "Winrate: " + rounded * 100 + "%";
-    })
-}
-
-function closeStatPopup()
-{
-    const modal = document.getElementById("modal")
-    modal.classList.remove("open")
-}
-
+/*************************************************************************************
+ * extendSect(element)
+ * 
+ * element: used to save each sections state uniquely
+ * 
+ * Toggles the section, if its open information about the game and a play button opens
+ * When closed, the information and play button is removed
+ *************************************************************************************/
 function extendSect(element)
 {
     let id = element.id
@@ -52,7 +40,4 @@ function extendSect(element)
         desc.style.display = "none"
         btn.style.display = "none"
     }
-
-    //document.getElementById("").style.display = ""
-    
 }

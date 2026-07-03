@@ -91,12 +91,12 @@ const SUFFIXES = { gtnWins: "wins", gtnLosses: "losses", gtnWR: "percent" }
 
 function getSelectedStatArray()
 {
-    const selectedElement = document.getElementById("sortOption").value
+    const selectedElement = document.getElementById("sort-option").value
 
     var items = Object.keys(GLOBALUSERINFO)
     items.sort((a, b) => GLOBALUSERINFO[b][selectedElement] - GLOBALUSERINFO[a][selectedElement]);
     const parent = document.getElementById('leaderboard');
-    const children = parent.getElementsByClassName('leaderboardSlot');
+    const children = parent.getElementsByClassName('leaderboard-slot');
 
     while (children.length > 0)
     {
@@ -108,7 +108,7 @@ function getSelectedStatArray()
     {
         const USER_UID = items[i]
         const containerDiv = document.createElement("div")
-        containerDiv.classList.add("leaderboardSlot")
+        containerDiv.classList.add("leaderboard-slot")
 
         const firstSpanElement = document.createElement("span")
         firstSpanElement.classList.add("sub")

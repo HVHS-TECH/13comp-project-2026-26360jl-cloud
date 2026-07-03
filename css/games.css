@@ -2,14 +2,14 @@ h1 {
     text-align: center;
 }
 
-.gameContainer {
+.game-container {
     text-align: center;
     display: flex;
     flex-wrap: wrap;
     margin: 15px;
 }
 
-.gameSect {
+.game-sect {
     width: 250px;
     height: min-content;
     margin-right: 15px;
@@ -23,18 +23,18 @@ h1 {
     transition: background-color 0.5s ease;
 }
 
-.gameSect:hover {
+.game-sect:hover {
     background-color: rgba(124, 58, 255, 0.24);
     border: 2px solid rgba(112.520718, 44.062154, 249.437846, .3);
     cursor: pointer;
 }
 
-.gameBtn {
+.game-btn {
     width: 215px;
     margin-top: -4px;
 }
 
-.infoBtn {
+.info-btn {
     width: 100px;
     height: 24px;
     padding: 0;

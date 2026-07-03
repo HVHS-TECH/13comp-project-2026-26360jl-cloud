@@ -1,3 +1,14 @@
+/****************************************************************************************************************/
+// confirm_login.js
+// Written by Joseph L
+// 
+// Used on every page to confirm the user has logged in with google and they have signed up to the database
+// Prevents someone from accessing without signing up and logging in
+// Also provides some useful user functions
+// If the user is detected to not be logged in, they are redirected to the login page
+// If the user has logged in but aren't in the database, they are redirected to the signup page
+/****************************************************************************************************************/
+
 document.addEventListener("DOMContentLoaded", function () {
     //every time the user loads a site, they are authenticated, when user is null they are not logged in
     firebase.auth().onAuthStateChanged(async (user) => {
@@ -9,17 +20,26 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        if (! await checkFirebase(user))
+        //check if the user is in firebase
+        if (! await checkFirebase(user.uid))
             return
 
         updateLocalStorage(user)
     })
 })
 
-async function checkFirebase(userInfo)
+/*************************************************************************************
+ * checkFirebase(uid)
+ * 
+ * Reads from firebase database to confirm the users info is there
+ * If snapshot.val() is null, that means they aren't in the database and they have skipped the signup process
+ * Returns true or false
+ * 
+ *************************************************************************************/
+async function checkFirebase(uid)
 {
     var userInFirebase = false
-    await firebase.database().ref('/registeredUsers/' + userInfo.uid).once('value', _checkFirebase);
+    await firebase.database().ref('/registeredUsers/' + uid).once('value', _checkFirebase);
 
     async function _checkFirebase(snapshot)
     {
@@ -35,6 +55,13 @@ async function checkFirebase(userInfo)
     return userInFirebase
 }
 
+/*************************************************************************************
+ * updateLocalStorage(user)
+ * 
+ * user: object that contains information about the user like uid, displayName, photoURL
+ * Updates local storage so this information is easily accessible
+ * 
+ *************************************************************************************/
 function updateLocalStorage(user)
 {
     if (user == null)
@@ -45,6 +72,12 @@ function updateLocalStorage(user)
     localStorage.setItem('userUid', user.uid);
 }
 
+/*************************************************************************************
+ * getUserInfo()
+ * 
+ * Utility function that returns local storage information as an easily usable object
+ * 
+ *************************************************************************************/
 function getUserInfo()
 {
     return {
@@ -54,8 +87,15 @@ function getUserInfo()
     };
 }
 
-//used to get information about other users with their uid
-//eg: used to get opponents name, and profile picture in GTN, used for the leaderboard aswell
+/*************************************************************************************
+ * getUserInfoFromUID(uid)
+ * 
+ * Gets information (as an object) about another user using their uid
+ * Used in gtn_game.js to get name and profile picture of opponent
+ * Used in leaderboard.js to get the name of everyone on the leaderboard
+ * Returns { uid, name, photoUrl }
+ * 
+ *************************************************************************************/
 async function getUserInfoFromUID(uid)
 {
     var tempUserInfo = {

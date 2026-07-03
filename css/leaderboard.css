@@ -1,4 +1,4 @@
-.leaderboardSlot {
+.leaderboard-slot {
     padding: 12px;
     margin: 8px;
     background-color: rgba(112.520718, 44.062154, 249.437846, .15);
@@ -20,7 +20,7 @@
     color: rgb(128, 128, 128);
 }
 
-#sortOption {
+#sort-option {
     width: min-content;
 }
 

@@ -1,3 +1,10 @@
+/****************************************************************************************************************/
+// fb_setup.js
+// Written by Joseph L
+// 
+// Initializes firebase and provides some wrappers to functions to make them easier to use
+// Used on every page
+/****************************************************************************************************************/
 const firebaseConfig = {
   apiKey: "AIzaSyAboa585vFNBApD40DNOiPatFOwumthHD4",
   authDomain: "comp-5e4a5.firebaseapp.com",
@@ -15,6 +22,19 @@ async function firebaseRead(ref, func)
   firebase.database().ref(ref).once('value', func);
 }
 
+/*************************************************************************************
+ * firebaseSnapshot(ref)
+ * 
+ * ref: a path in the database
+ * 
+ * Useful when you want to get a value once from firebase
+ * Eg: var temp = firebaseSnapshot('ref');
+ * 
+ * Without this you would have to set temp inside a new function *(snapshot) => {}*
+ * 
+ * Returns result of read
+ * 
+ *************************************************************************************/
 async function firebaseSnapshot(ref)
 {
   var result;
