@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
     firebase.auth().onAuthStateChanged(async (user) => {
-        console.log(user)
         if (user == null)
             return
 
@@ -19,6 +18,13 @@ function login()
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function(result) {
         var userInfo = result.user;
+
+        if (userInfo != null)
+        {
+            localStorage.setItem('userName', userInfo.displayName);
+            localStorage.setItem('userImg', userInfo.photoURL);
+            localStorage.setItem('userUid', userInfo.uid);
+        }
     })
 }
 

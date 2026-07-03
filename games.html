@@ -8,53 +8,28 @@
         <script src="scripts/fb_setup.js"></script>
         <script src="scripts/confirm_login.js"></script>
         <script src="scripts/games.js"></script>
-        <link href="css/style.css" rel="stylesheet"/>
         <link href="css/games.css" rel="stylesheet"/>
+        <link href="css/navbar.css" rel="stylesheet"/>
         <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </head>
     <body>
-        <header class="onetwothreefour border-bottom">
-            <div class="dropdown fries">
-              <a
-                href="#"
-                class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                >
-            <img
-                src=""
-                alt="mdo"
-                width="32"
-                height="32"
-                class="rounded-circle"
-                id="profileImg"
-            />
-            </a>
-              <ul class="dropdown-menu text-small">
-                <li><a class="dropdown-item" href="#">My Stats</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-              </ul>
-            </div>
-            <div class="keepthelinkshere">
-              <a href="games.html" class="pa link-secondary">Games</a>
-              <a href="leaderboards.html" class="pa">Leaderboards</a>
-            </div>
-        </header>
-        <h1>Games</h1>
-        <div class="gameContainer">
-          <div id="gs1" class="gameSect" onclick="extendSect(gs1)">Guess the Number
-            <img class="thumbnail" width="215" height="180">
-            <p id="extend" style="display: none">Two players take turns guessing a number between 1 and 100. The first player to guess correct wins!</p>
-            <a id="extend1" style="display: none" href="gtn.html"><button class="btn btn-success gameBtn">Play</button></a>
-          </div>
-          <div id="gs2" class="gameSect" onclick="extendSect(gs2)">Temp Game
-            <img class="thumbnail" width="215" height="180">
-            <p id="extend" style="display: none">This is a placeholder for a temporary game.</p>
-            <a id="extend1" style="display: none" href=""><button class="btn btn-success gameBtn">Play</button></a>
-          </div>
+      <div id="header-container"></div>
+      <script src="scripts/navbar.mjs"></script>
+
+      <h1>Games</h1>
+      <div class="gameContainer">
+        <div id="gs1" class="gameSect" onclick="extendSect(gs1)"><b>Guess the Number</b>
+          <img class="thumbnail" width="215" height="215" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOPgwpxHImLiYatxiLBr5cC_eqI6Onkwxp8o820AqMOUtT59MU0lEr5Sk&s=10">
+          <p id="extend" style="display: none">Two players take turns guessing a number between 1 and 100. The first player to guess correct wins!</p>
+          <a id="extend1" style="display: none" href="gtn.html"><button class="btn btn-success gameBtn">Play</button></a>
         </div>
+        <div id="gs2" class="gameSect" onclick="extendSect(gs2)"><b>Temp Game</b>
+          <img class="thumbnail" width="215" height="215" src="https://shophealthyzzzs.com/wp-content/uploads/woocommerce-placeholder-600x600.png">
+          <p id="extend" style="display: none">This is a placeholder for a temporary game.</p>
+          <a id="extend1" style="display: none" href=""><button class="btn btn-success gameBtn">Play</button></a>
+        </div>
+      </div>
     </body>
 </html>

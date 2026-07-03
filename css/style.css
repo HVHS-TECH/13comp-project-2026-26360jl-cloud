@@ -1,45 +1,22 @@
 h1 {
-    color:green;
     text-align: center;
 }
 
-@keyframes gradient {
-    0%{ background-position:50% 100%; }
-    20%{ background-position:0% 50%; }
-    40%{ background-position:0% 0%; }
-    60%{ background-position:50% 0%; }
-    80%{ background-position:100% 50%; }
-    100%{ background-position:50% 100%; }
+.padding {
+    margin: 8px;
 }
 
-.onetwothreefour {
-    padding: 10px;
+#flexbox {
+    padding: 8px;
+}
+
+.guess-input {
+    width: 25%;
+    margin-right: 4px;
+}
+
+.game-components {
     display: flex;
-}
-
-.fries {
-    width: 50px;
-}
-
-.keepthelinkshere {
-    display: flex;
-    margin-left: 4px;
-    justify-content: center;
+    text-align: center;
     align-items: center;
-}
-
-.pa {
-    display: block;
-    padding: 4px;
-    font-size: var(--bs-nav-link-font-size);
-    font-weight: var(--bs-nav-link-font-weight);
-    color: var(--bs-nav-link-color);
-    text-decoration: none;
-    background: 0 0;
-    border: 0;
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
-}
-
-.links {
-    display: flex;
 }

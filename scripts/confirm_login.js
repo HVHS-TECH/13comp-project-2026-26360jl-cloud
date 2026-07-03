@@ -1,39 +1,64 @@
-userInfo = {
-    uid: "",
-    name: "",
-    photoUrl: ""
-}
-
 document.addEventListener("DOMContentLoaded", function () {
-
-    //const img = document.getElementById("profileImg")
-    //img.src = localStorage.getItem('userImg');
-
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user)
+    //every time the user loads a site, they are authenticated, when user is null they are not logged in
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user == null)
         {
-            userInfo.uid = user.uid
-            userInfo.name = user.displayName
-            userInfo.photoUrl = user.photoURL
-
-            localStorage.setItem('userImg', userInfo.photoUrl);
-            return
+            //if user is null, you're not logged in. Redirect to homepage
+            alert("you are not logged in")
+            window.location.replace("./index.html")
+            return;
         }
 
-        //if user is null, you're not logged in. Redirect to homepage
-        alert("you are not logged in")
-        window.location.replace("./index.html")
+        if (! await checkFirebase(user))
+            return
+
+        updateLocalStorage(user)
     })
 })
 
-function getUserInfo()
+async function checkFirebase(userInfo)
 {
-    return userInfo;
+    var userInFirebase = false
+    await firebase.database().ref('/registeredUsers/' + userInfo.uid).once('value', _checkFirebase);
+
+    async function _checkFirebase(snapshot)
+    {
+        //if user is not registered in firebase
+        if (snapshot.val() == null)
+        {
+            userInFirebase = false
+            alert("you are not signed up")
+            await window.location.replace("./signup.html")
+        } else userInFirebase = true
+    }
+
+    return userInFirebase
 }
 
+function updateLocalStorage(user)
+{
+    if (user == null)
+        return; // should never get here
+
+    localStorage.setItem('userName', user.displayName);
+    localStorage.setItem('userImg', user.photoURL);
+    localStorage.setItem('userUid', user.uid);
+}
+
+function getUserInfo()
+{
+    return {
+        uid: localStorage.getItem('userUid'),
+        name: localStorage.getItem('userName'),
+        photoUrl: localStorage.getItem('userImg')
+    };
+}
+
+//used to get information about other users with their uid
+//eg: used to get opponents name, and profile picture in GTN, used for the leaderboard aswell
 async function getUserInfoFromUID(uid)
 {
-    var idkHowObjectsWorkInJavascript = {
+    var tempUserInfo = {
         uid: "",
         name: "",
         photoUrl: ""
@@ -42,36 +67,12 @@ async function getUserInfoFromUID(uid)
     await firebase.database().ref('/registeredUsers/' + uid).once('value', (snapshot) => {
         const userInfo = snapshot.val();
         //if user is not registered in firebase
-        if (userInfo == null)
-        {
-            return null
-        }
-        idkHowObjectsWorkInJavascript.uid = userInfo.uid
-        idkHowObjectsWorkInJavascript.name = userInfo.displayName
-        idkHowObjectsWorkInJavascript.photoUrl = userInfo.photoUrl
+        if (userInfo == null) return null
+
+        tempUserInfo.uid = userInfo.uid
+        tempUserInfo.name = userInfo.displayName
+        tempUserInfo.photoUrl = userInfo.photoUrl
     });
     
-    return idkHowObjectsWorkInJavascript;
-}
-
-function toggleFunMode()
-{
-    const element = document.getElementById("subscribe")
-    const i = document.getElementById("f")
-
-    if (element.checked)
-    {
-        document.body.style.background = "linear-gradient(to bottom right, rgb(101, 190, 60), rgb(54, 134, 240), red)"
-        document.body.style.backgroundSize = "600% 600%"
-        document.body.style.animation = "gradient  8s ease infinite"
-        document.body.style.backgroundColor = "rgb(250, 240, 226)"
-        document.body.style.height = "100vh"
-        document.body.style.overflow = "hidden"
-        i.style.display = "none"
-    }
-    else
-    {
-        document.body.style = ""
-        i.style.display = ""
-    }
+    return tempUserInfo;
 }

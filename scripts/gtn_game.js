@@ -20,7 +20,7 @@ async function joinLobby(lobbyId)
     gameInfo.currentPlayersTurn = 0;
 
     var opponentUid;
-    if (userInfo.uid == LOBBY_INFO.player1)
+    if (getUserInfo().uid == LOBBY_INFO.player1)
     {
         gameInfo.playerTurnId = 0
         opponentUid = LOBBY_INFO.player2

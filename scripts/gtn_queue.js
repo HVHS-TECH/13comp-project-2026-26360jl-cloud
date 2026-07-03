@@ -38,8 +38,8 @@ function joinQueue()
     if (userInQueue) return
 
     userInQueue = true
-    firebaseWrite("queue/" + userInfo.uid, {timestamp: Date.now()})
-    firebaseRef("queue/" + userInfo.uid).onDisconnect().remove()
+    firebaseWrite("queue/" + getUserInfo().uid, {timestamp: Date.now()})
+    firebaseRef("queue/" + getUserInfo().uid).onDisconnect().remove()
 
     firebaseRead("queue", (snapshot) => {
         if (snapshot.val() == null) return
@@ -49,7 +49,7 @@ function joinQueue()
         //if you are the first person in queue
         if (queueLength == 1)
         {
-            firebaseWrite("queue/" + userInfo.uid, {matchmake: true})
+            firebaseWrite("queue/" + getUserInfo().uid, {matchmake: true})
         }
         else if (queueLength == 2)
         {
@@ -59,7 +59,7 @@ function joinQueue()
         }
     })
 
-    firebaseRef("queue/" + userInfo.uid).on('value', (snapshot) => {
+    firebaseRef("queue/" + getUserInfo().uid).on('value', (snapshot) => {
         if (snapshot.val() == null)
             return
 
@@ -113,6 +113,6 @@ function leaveQueue()
     
     userInQueue = false
 
-    firebaseRef("queue/" + userInfo.uid).remove()
-    firebaseRef("queue/" + userInfo.uid).off()
+    firebaseRef("queue/" + getUserInfo().uid).remove()
+    firebaseRef("queue/" + getUserInfo().uid).off()
 }

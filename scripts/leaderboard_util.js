@@ -15,6 +15,7 @@ async function leaderboardIncrementStat(uid, stat)
 }
 
 //if the user has never won/lost a game, it doesnt exist in the database. This just makes it exist as 0 so the leaderboard can sort correctly.
+//and calculate win rate
 async function leaderboardValidateStats(uid, stat) {
     await firebase.database().ref("leaderboard/" + uid + "/" + stat).once('value', _getStatValue);
 

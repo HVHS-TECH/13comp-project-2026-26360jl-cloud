@@ -1,3 +1,8 @@
+h1 {
+    color:green;
+    text-align: center;
+}
+
 .gameContainer {
     text-align: center;
     display: flex;
@@ -14,6 +19,7 @@
     border: 1px solid rgba(112.520718, 44.062154, 249.437846, .3);
     border-radius: 10px;
     padding: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 
     transition: background-color 0.5s ease;
 }
@@ -43,4 +49,5 @@
 .thumbnail {
     margin-top: 4px;
     margin-bottom: 8px;
+    border-radius: 5px;
 }
